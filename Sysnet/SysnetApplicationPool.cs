@@ -37,7 +37,7 @@ namespace Com.Ddlev.DataCache.Sysnet
             
             try
             {
-                return new HttpApplication().Application[key];
+                return System.Web.HttpContext.Current.Application.Get(key);
             }
             catch
             {
@@ -46,16 +46,16 @@ namespace Com.Ddlev.DataCache.Sysnet
         }
         public static bool S_HasKey(string key)
         {
-            return new HttpApplication().Application.AllKeys.Contains(key);
+            return System.Web.HttpContext.Current.Application.AllKeys.Contains(key);
         }
 
         public static void S_Remove(string key)
         {
             try
             {
-                if (new HttpApplication().Application[key] != null)
+                if (System.Web.HttpContext.Current.Application[key] != null)
                 {
-                    new HttpApplication().Application.Remove(key);
+                    System.Web.HttpContext.Current.Application.Remove(key);
                 }
             }
             catch
@@ -66,7 +66,7 @@ namespace Com.Ddlev.DataCache.Sysnet
         {
 
             S_Remove(key);
-            new HttpApplication().Application.Add(key, value);
+            System.Web.HttpContext.Current.Application.Add(key, value);
         }
 
         public void Clear()
@@ -75,7 +75,7 @@ namespace Com.Ddlev.DataCache.Sysnet
         }
         public static void S_Clear()
         {
-            new HttpApplication().Application.Clear();
+            System.Web.HttpContext.Current.Application.Clear();
         }
     }
 }
