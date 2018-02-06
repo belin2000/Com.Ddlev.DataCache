@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Com.Ddlev.DataCache
 {
@@ -35,7 +36,9 @@ namespace Com.Ddlev.DataCache
         /// <param name="key">键值</param>
         /// <returns></returns>
         bool HasKey(string key);
-
+        /// <summary>
+        /// 删除全部的缓存
+        /// </summary>
         void Clear();
     }
 }

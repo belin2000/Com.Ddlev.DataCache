@@ -25,19 +25,31 @@ namespace Com.Ddlev.DataCache.Sysnet
             S_Remove(key);
         }
 
+
         public void Set(string key, dynamic value, int ss = -1)
         {
-            S_Set(key, value);
+            S_Set(key, value,ss=-1);
+        }
+
+        public SysnetCachePool()
+        {
         }
 
         public static dynamic S_Get(string key)
         {
-            return HttpContext.Current.Cache[key];
+            if (S_HasKey(key))
+            {
+                return HttpRuntime.Cache[key];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static bool S_HasKey(string key)
         {
-            if (HttpContext.Current.Cache[key] == null)
+            if (HttpRuntime.Cache[key] == null)
             {
                 return false;
             }
@@ -49,13 +61,14 @@ namespace Com.Ddlev.DataCache.Sysnet
 
         public static void S_Remove(string key)
         {
-            HttpContext.Current.Cache.Remove(key);
+
+            HttpRuntime.Cache.Remove(key);
         }
 
-        public static void S_Set(string key, dynamic value, int ss = -1)
+        public static void S_Set(string key, dynamic value, int ss = -1, HttpContext _hc = null)
         {
             S_Remove(key);
-            HttpContext.Current.Cache.Add(key, value, null, DateTime.Now.AddSeconds(ss), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Default, null);
+            HttpRuntime.Cache.Add(key, value, null, DateTime.Now.AddSeconds(ss), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Default, null);
         }
         public void Clear()
         {
@@ -63,10 +76,11 @@ namespace Com.Ddlev.DataCache.Sysnet
         }
         public static void S_Clear()
         {
-            var CacheEnum = HttpContext.Current.Cache.GetEnumerator();
+
+            var CacheEnum = HttpRuntime.Cache.GetEnumerator();
             while (CacheEnum.MoveNext())
             {
-                HttpContext.Current.Cache.Remove(CacheEnum.Key.ToString());
+                HttpRuntime.Cache.Remove(CacheEnum.Key.ToString());
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Com.Ddlev.DataCache.Sysnet
 {
@@ -11,8 +12,7 @@ namespace Com.Ddlev.DataCache.Sysnet
         private static SysnetPool _SysnetPool=null;
         static readonly object Sysnetlock = new object();
         public int cachedefaults = 0;
-
-        public static SysnetPool GetPool(int _cachedefaults = 20)
+        public static SysnetPool GetPool(HttpContext _hc= null, int _cachedefaults = 20)
         {
             if (_SysnetPool == null)
             {
@@ -29,7 +29,7 @@ namespace Com.Ddlev.DataCache.Sysnet
         }
         public dynamic Get(string key)
         {
-            return SysnetApplicationPool.S_Get(key) ?? SysnetCachePool.S_Get(key);
+            return  SysnetCachePool.S_Get(key);
         }
 
         public bool HasKey(string key)

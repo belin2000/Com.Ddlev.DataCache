@@ -76,5 +76,9 @@ namespace Com.Ddlev.DataCache.Redis
             }
         }
 
+        public dynamic Find(string pattern) {
+            return _instance.GetServer(_conn).Keys(_dbIndex, pattern, 999);
+        }
+
     }
 }
