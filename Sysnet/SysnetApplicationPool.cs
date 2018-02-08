@@ -37,7 +37,7 @@ namespace Com.Ddlev.DataCache.Sysnet
             
             try
             {
-                return System.Web.HttpContext.Current.Application.Get(key);
+                return HttpRuntime.Cache.Get("APLT-"+key);
             }
             catch
             {
@@ -46,16 +46,16 @@ namespace Com.Ddlev.DataCache.Sysnet
         }
         public static bool S_HasKey(string key)
         {
-            return System.Web.HttpContext.Current.Application.AllKeys.Contains(key);
+            return !S_Get(key) == null;
         }
 
         public static void S_Remove(string key)
         {
             try
             {
-                if (System.Web.HttpContext.Current.Application[key] != null)
+                if (S_HasKey(key))
                 {
-                    System.Web.HttpContext.Current.Application.Remove(key);
+                    HttpRuntime.Cache.Remove("APLT-" + key);
                 }
             }
             catch
@@ -65,8 +65,7 @@ namespace Com.Ddlev.DataCache.Sysnet
         public static void S_Set(string key, dynamic value, int ss = -1)
         {
 
-            S_Remove(key);
-            System.Web.HttpContext.Current.Application.Add(key, value);
+            HttpRuntime.Cache.Insert("APLT-" + key,value);
         }
 
         public void Clear()
@@ -75,7 +74,16 @@ namespace Com.Ddlev.DataCache.Sysnet
         }
         public static void S_Clear()
         {
-            System.Web.HttpContext.Current.Application.Clear();
+            var CacheEnum = HttpRuntime.Cache.GetEnumerator();
+            while (CacheEnum.MoveNext())
+            {
+                var itemkey = CacheEnum.Key.ToString();
+                if (itemkey.Substring(0, 5) == "APLT-")
+                {
+                    HttpRuntime.Cache.Remove(itemkey);
+                }
+                continue;
+            }
         }
     }
 }

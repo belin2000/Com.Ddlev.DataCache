@@ -17,7 +17,7 @@ namespace Com.Ddlev.DataCache
         /// </summary>
         /// <param name="key">键值</param>
         /// <param name="value">值</param>
-        /// <param name="ss">过期时间(-1表示永不过期，0表示马上过期，大于0表示缓存的秒数)</param>
+        /// <param name="ss">过期时间(-1表示长时间不过期，0表示马上过期，大于0表示缓存的秒数)</param>
         void Set(string key, dynamic value, int ss = -1);
         /// <summary>
         /// 获取键值对应的值

@@ -9,6 +9,8 @@ namespace Com.Ddlev.DataCache.Sysnet
 {
     public class SysnetPool : IDataCacheHelper
     {
+        
+
         private static SysnetPool _SysnetPool=null;
         static readonly object Sysnetlock = new object();
         public int cachedefaults = 0;
@@ -39,8 +41,9 @@ namespace Com.Ddlev.DataCache.Sysnet
 
         public void Remove(string key)
         {
-            SysnetApplicationPool.S_Remove(key);
             SysnetCachePool.S_Remove(key);
+            SysnetApplicationPool.S_Remove(key);
+
         }
 
         public void Set(string key, dynamic value, int ss = 0)

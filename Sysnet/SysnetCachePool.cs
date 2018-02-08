@@ -61,14 +61,13 @@ namespace Com.Ddlev.DataCache.Sysnet
 
         public static void S_Remove(string key)
         {
-
             HttpRuntime.Cache.Remove(key);
         }
 
-        public static void S_Set(string key, dynamic value, int ss = -1, HttpContext _hc = null)
+        public static void S_Set(string key, dynamic value, int ss = -1)
         {
             S_Remove(key);
-            HttpRuntime.Cache.Add(key, value, null, DateTime.Now.AddSeconds(ss), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Default, null);
+            HttpRuntime.Cache.Insert(key, value, null, DateTime.Now.AddSeconds(ss), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Default, null);
         }
         public void Clear()
         {
