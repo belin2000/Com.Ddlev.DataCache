@@ -1,0 +1,7 @@
+H:\svn项目\comdll\Com.Ddlev.Redis\bin\Debug\Com.Ddlev.Redis.dll
+H:\svn项目\comdll\Com.Ddlev.Redis\bin\Debug\Com.Ddlev.Redis.pdb
+H:\svn项目\comdll\Com.Ddlev.Redis\bin\Debug\StackExchange.Redis.dll
+H:\svn项目\comdll\Com.Ddlev.Redis\bin\Debug\StackExchange.Redis.xml
+H:\svn项目\comdll\Com.Ddlev.Redis\obj\Debug\Com.Ddlev.Redis.csprojResolveAssemblyReference.cache
+H:\svn项目\comdll\Com.Ddlev.Redis\obj\Debug\Com.Ddlev.Redis.dll
+H:\svn项目\comdll\Com.Ddlev.Redis\obj\Debug\Com.Ddlev.Redis.pdb
