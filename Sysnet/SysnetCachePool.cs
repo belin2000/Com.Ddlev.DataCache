@@ -79,7 +79,12 @@ namespace Com.Ddlev.DataCache.Sysnet
             var CacheEnum = HttpRuntime.Cache.GetEnumerator();
             while (CacheEnum.MoveNext())
             {
-                HttpRuntime.Cache.Remove(CacheEnum.Key.ToString());
+                var itemkey = CacheEnum.Key.ToString();
+                if (itemkey.Substring(0, 5) != "APLT-")
+                {
+                    HttpRuntime.Cache.Remove(itemkey);
+                }
+                continue;
             }
         }
     }
