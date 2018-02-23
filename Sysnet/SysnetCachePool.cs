@@ -37,9 +37,9 @@ namespace Com.Ddlev.DataCache.Sysnet
 
         public static dynamic S_Get(string key)
         {
-            if (S_HasKey(key))
+            if (S_HasKey("Cac-" + key))
             {
-                return HttpRuntime.Cache[key];
+                return HttpRuntime.Cache["Cac-" + key];
             }
             else
             {
@@ -49,7 +49,7 @@ namespace Com.Ddlev.DataCache.Sysnet
 
         public static bool S_HasKey(string key)
         {
-            if (HttpRuntime.Cache[key] == null)
+            if (HttpRuntime.Cache["Cac-" + key] == null)
             {
                 return false;
             }
@@ -61,13 +61,13 @@ namespace Com.Ddlev.DataCache.Sysnet
 
         public static void S_Remove(string key)
         {
-            HttpRuntime.Cache.Remove(key);
+            HttpRuntime.Cache.Remove("Cac-" + key);
         }
 
         public static void S_Set(string key, dynamic value, int ss = -1)
         {
             S_Remove(key);
-            HttpRuntime.Cache.Insert(key, value, null, DateTime.Now.AddSeconds(ss), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Default, null);
+            HttpRuntime.Cache.Insert("Cac-" + key, value, null, DateTime.Now.AddSeconds(ss), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Default, null);
         }
         public void Clear()
         {
@@ -80,7 +80,7 @@ namespace Com.Ddlev.DataCache.Sysnet
             while (CacheEnum.MoveNext())
             {
                 var itemkey = CacheEnum.Key.ToString();
-                if (itemkey.Substring(0, 5) != "APLT-")
+                if (itemkey.Substring(0, 4) == "Cac-")
                 {
                     HttpRuntime.Cache.Remove(itemkey);
                 }
