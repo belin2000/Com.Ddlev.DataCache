@@ -14,22 +14,26 @@ namespace Com.Ddlev.DataCache.Redis
         private static ConnectionMultiplexer _instance;
         private static RedisPool _RedisPool;
         int _dbIndex = -1;
-        private static string _conn = ConfigurationManager.AppSettings["RedisConfig"] ?? "127.0.0.1:6379";
-        public static RedisPool GetPool(int dbIndex=-1)
+        private static string _conn;
+        public static RedisPool GetPool( string conn = null, int dbIndex = -1)
         {
             if (_RedisPool==null) {
                 lock(redislock)
                 {
-                    _RedisPool = new RedisPool(dbIndex);
+                    if (_RedisPool == null || !_instance.IsConnected)
+                    {
+                        _RedisPool = new RedisPool(conn);
+                    }
                 }
             }
+            _RedisPool._dbIndex = dbIndex;
             return _RedisPool;
         }
-        public RedisPool(int dbIndex=-1)
+        public RedisPool(string conn=null)
         {
             try
             {
-                _dbIndex = dbIndex;
+                _conn = conn ?? ConfigurationManager.AppSettings["RedisConfig"] ?? "127.0.0.1:6379";
                 _instance = ConnectionMultiplexer.Connect(_conn);
             }
             catch
@@ -38,46 +42,78 @@ namespace Com.Ddlev.DataCache.Redis
             }
         }
 
-
         public dynamic Get(string key)
         {
+            return Get(key, _dbIndex);
+        }
+
+        public dynamic Get(string key, int dbIndex)
+        {
+            dbIndex = dbIndex < -1 ? _dbIndex : dbIndex;
             if (!HasKey(key))
             {
                 return null;
             }
-            return _instance.GetDatabase(_dbIndex).StringGet(key);
+            return _instance.GetDatabase(dbIndex).StringGet(key);
         }
         public void Remove(string key)
         {
-            _instance.GetDatabase(_dbIndex).KeyDelete(key);
+            Remove(key, _dbIndex);
+        }
+        public void Remove(string key, int dbIndex)
+        {
+            dbIndex = dbIndex < -1 ? _dbIndex : dbIndex;
+            _instance.GetDatabase(dbIndex).KeyDelete(key);
         }
 
         public void Clear()
         {
-            _instance.GetServer(_conn).FlushDatabase(_dbIndex);
+            Clear(_dbIndex);
+        }
+        public void Clear(int dbIndex)
+        {
+            dbIndex = dbIndex < -1 ? _dbIndex : dbIndex;
+            _instance.GetServer(_conn).FlushDatabase(dbIndex);
         }
         public bool HasKey(string key)
         {
-            return _instance.GetDatabase(_dbIndex).KeyExists(key);
+            return HasKey(key, _dbIndex);
         }
-
-        public void Set(string key, dynamic value,int ss=0)
+        public bool HasKey(string key, int dbIndex)
         {
+            dbIndex = dbIndex < -1 ? _dbIndex : dbIndex;
+            try
+            {
+                return _instance.GetDatabase(dbIndex).KeyExists(key);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public void Set(string key, dynamic value, int ss = 0)
+        {
+            Set(key, value, _dbIndex, ss);
+        }
+        public void Set(string key, dynamic value, int dbIndex,int ss=0 )
+        {
+            dbIndex = dbIndex < -1 ? _dbIndex : dbIndex;
             if (ss <0)
             {
-                _instance.GetDatabase(_dbIndex).StringSet(key, value);
+                _instance.GetDatabase(dbIndex).StringSet(key, value);
             }
             else
             {
                 if (ss > 0)
                 {
-                    _instance.GetDatabase(_dbIndex).StringSet(key, value, TimeSpan.FromSeconds(ss));
+                    _instance.GetDatabase(dbIndex).StringSet(key, value, TimeSpan.FromSeconds(ss));
                 }
             }
         }
 
-        public dynamic Find(string pattern) {
-            return _instance.GetServer(_conn).Keys(_dbIndex, pattern, 999);
+        public dynamic Find(string pattern, int dbIndex = -99) {
+            dbIndex = dbIndex < -1 ? _dbIndex : dbIndex;
+            return _instance.GetServer(_conn).Keys(dbIndex, pattern, 999);
         }
 
     }
