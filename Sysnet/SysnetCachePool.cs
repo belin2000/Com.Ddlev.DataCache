@@ -10,9 +10,9 @@ namespace Com.Ddlev.DataCache.Sysnet
 {
     public class SysnetCachePool : IDataCacheHelper
     {
-        public dynamic Get(string key)
+        public T Get<T>(string key)
         {
-            return S_Get(key);
+            return S_Get<T>(key);
         }
 
         public bool HasKey(string key)
@@ -26,7 +26,7 @@ namespace Com.Ddlev.DataCache.Sysnet
         }
 
 
-        public void Set(string key, dynamic value, int ss = -1)
+        public void Set<T>(string key, T value, int ss = -1)
         {
             S_Set(key, value,ss=-1);
         }
@@ -35,15 +35,15 @@ namespace Com.Ddlev.DataCache.Sysnet
         {
         }
 
-        public static dynamic S_Get(string key)
+        public static T S_Get<T>(string key)
         {
-            if (S_HasKey("Cac-" + key))
+            try
             {
-                return HttpRuntime.Cache["Cac-" + key];
+                return (T)HttpRuntime.Cache.Get("Cac-" + key);
             }
-            else
+            catch
             {
-                return null;
+                return default(T);
             }
         }
 
@@ -64,7 +64,7 @@ namespace Com.Ddlev.DataCache.Sysnet
             HttpRuntime.Cache.Remove("Cac-" + key);
         }
 
-        public static void S_Set(string key, dynamic value, int ss = -1)
+        public static void S_Set<T>(string key, T value, int ss = -1)
         {
             S_Remove(key);
             HttpRuntime.Cache.Insert("Cac-" + key, value, null, DateTime.Now.AddSeconds(ss), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Default, null);

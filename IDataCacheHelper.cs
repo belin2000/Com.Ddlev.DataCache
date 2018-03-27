@@ -18,13 +18,13 @@ namespace Com.Ddlev.DataCache
         /// <param name="key">键值</param>
         /// <param name="value">值</param>
         /// <param name="ss">过期时间(-1表示长时间不过期，0表示马上过期，大于0表示缓存的秒数)</param>
-        void Set(string key, dynamic value, int ss = -1);
+        void Set<T>(string key, T value, int ss = -1);
         /// <summary>
         /// 获取键值对应的值
         /// </summary>
         /// <param name="key">键值</param>
         /// <returns></returns>
-        dynamic Get(string key) ;
+        T Get<T>(string key) ;
         /// <summary>
         /// 移除一个键值（它对应的值也被移除）
         /// </summary>

@@ -15,6 +15,6 @@ H:\svn项目\comdll\Com.Ddlev.DataCache\bin\Debug\StackExchange.Redis.dll
 H:\svn项目\comdll\Com.Ddlev.DataCache\bin\Debug\Newtonsoft.Json.pdb
 H:\svn项目\comdll\Com.Ddlev.DataCache\bin\Debug\Newtonsoft.Json.xml
 H:\svn项目\comdll\Com.Ddlev.DataCache\bin\Debug\StackExchange.Redis.xml
-H:\svn项目\comdll\Com.Ddlev.DataCache\obj\Debug\Com.Ddlev.DataCache.csprojResolveAssemblyReference.cache
 H:\svn项目\comdll\Com.Ddlev.DataCache\obj\Debug\Com.Ddlev.DataCache.dll
 H:\svn项目\comdll\Com.Ddlev.DataCache\obj\Debug\Com.Ddlev.DataCache.pdb
+H:\svn项目\comdll\Com.Ddlev.DataCache\obj\Debug\Com.Ddlev.DataCache.csprojResolveAssemblyReference.cache

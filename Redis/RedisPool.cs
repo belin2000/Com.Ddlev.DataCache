@@ -42,19 +42,28 @@ namespace Com.Ddlev.DataCache.Redis
             }
         }
 
-        public dynamic Get(string key)
+        public T Get<T>(string key)
         {
-            return Get(key, _dbIndex);
+            return Get<T>(key, _dbIndex);
         }
 
-        public dynamic Get(string key, int dbIndex)
+        public T Get<T>(string key, int dbIndex)
         {
             dbIndex = dbIndex < -1 ? _dbIndex : dbIndex;
             if (!HasKey(key))
             {
-                return null;
+                return default(T);
             }
-            return _instance.GetDatabase(dbIndex).StringGet(key);
+
+            if (typeof(T) == typeof(int) || typeof(T) == typeof(Int16) || typeof(T) == typeof(Int32) || typeof(T) == typeof(Int64) || typeof(T) == typeof(long) || typeof(T) == typeof(decimal) || typeof(T) == typeof(Decimal) || typeof(T) == typeof(float) || typeof(T) == typeof(Double) || typeof(T) == typeof(double) || typeof(T) == typeof(string) || typeof(T) == typeof(String) || typeof(T) == typeof(DateTime) || typeof(T) == typeof(bool) || typeof(T) == typeof(Enum))
+            {
+                return (T)Convert.ChangeType(_instance.GetDatabase(dbIndex).StringGet(key), typeof(T));
+            }
+            else
+            {
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(_instance.GetDatabase(dbIndex).StringGet(key).ToString());
+            }
+            
         }
         public void Remove(string key)
         {
@@ -91,22 +100,33 @@ namespace Com.Ddlev.DataCache.Redis
                 return false;
             }
         }
-        public void Set(string key, dynamic value, int ss = 0)
+        public void Set<T>(string key, T value, int ss = 0)
         {
             Set(key, value, _dbIndex, ss);
         }
-        public void Set(string key, dynamic value, int dbIndex,int ss=0 )
+        public void Set<T>(string key, T value, int dbIndex,int ss=0 )
         {
+            var nvale = "";
             dbIndex = dbIndex < -1 ? _dbIndex : dbIndex;
+            //对数据进行json编码后存储
+            if (typeof(T) == typeof(int) || typeof(T) == typeof(Int16) || typeof(T) == typeof(Int32) || typeof(T) == typeof(Int64) || typeof(T) == typeof(long) || typeof(T) == typeof(decimal) || typeof(T) == typeof(Decimal) || typeof(T) == typeof(float) || typeof(T) == typeof(Double) || typeof(T) == typeof(double) || typeof(T) == typeof(string) || typeof(T) == typeof(String) || typeof(T) == typeof(DateTime) || typeof(T) == typeof(bool) || typeof(T) == typeof(Enum))
+            {
+                nvale = value.ToString();
+            }
+            else
+            {
+                nvale = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+            }
+            
             if (ss <0)
             {
-                _instance.GetDatabase(dbIndex).StringSet(key, value);
+                _instance.GetDatabase(dbIndex).StringSet(key, nvale);
             }
             else
             {
                 if (ss > 0)
                 {
-                    _instance.GetDatabase(dbIndex).StringSet(key, value, TimeSpan.FromSeconds(ss));
+                    _instance.GetDatabase(dbIndex).StringSet(key, nvale, TimeSpan.FromSeconds(ss));
                 }
             }
         }

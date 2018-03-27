@@ -27,7 +27,7 @@ namespace Com.Ddlev.DataCache
             var key = ct.ToString() + "db" + _conn;
             lock (IClock)
             {
-                if (dic.Count==0 || dic[key]==null)
+                if (dic.Count==0 || !dic.ContainsKey(key) || dic[key]==null)
                 {
                     IDataCacheHelper _IDataCacheHelper = null;
                     switch (ct)

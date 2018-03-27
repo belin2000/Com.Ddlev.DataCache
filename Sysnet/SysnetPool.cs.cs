@@ -29,9 +29,16 @@ namespace Com.Ddlev.DataCache.Sysnet
         {
             cachedefaults = _cachedefaults;
         }
-        public dynamic Get(string key)
+        public T Get<T>(string key)
         {
-            return SysnetApplicationPool.S_Get(key)?? SysnetCachePool.S_Get(key);
+            if (SysnetApplicationPool.S_HasKey(key))
+            {
+                return SysnetApplicationPool.S_Get<T>(key);
+            }
+            else
+            {
+                return SysnetCachePool.S_Get<T>(key);
+            }
         }
 
         public bool HasKey(string key)
@@ -46,15 +53,15 @@ namespace Com.Ddlev.DataCache.Sysnet
 
         }
 
-        public void Set(string key, dynamic value, int ss = 0)
+        public void Set<T>(string key, T value, int ss = 0)
         {
             if (ss == 0) { ss=cachedefaults; }
             Remove(key);
             if (ss < 0) {
-                SysnetApplicationPool.S_Set(key, value);
+                SysnetApplicationPool.S_Set<T>(key, value);
             }
             if (ss > 0) {
-                SysnetCachePool.S_Set(key, value, ss);
+                SysnetCachePool.S_Set<T>(key, value, ss);
             }
         }
 
