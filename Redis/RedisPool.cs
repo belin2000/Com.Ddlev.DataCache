@@ -33,7 +33,7 @@ namespace Com.Ddlev.DataCache.Redis
         {
             try
             {
-                _conn = conn ?? ConfigurationManager.AppSettings["RedisConfig"] ?? "127.0.0.1:6379";
+                _conn = conn ?? ConfigurationManager.AppSettings["RedisConfig"] ?? "127.0.0.1:6379"; //"Redis服务器IP地址:端口号,password=Redis密码"
                 _instance = ConnectionMultiplexer.Connect(_conn);
             }
             catch
